@@ -41,6 +41,12 @@ public class Simulator
         this(DEFAULT_DEPTH, DEFAULT_WIDTH);
     }
     
+    public static void main(String[] args) {
+    	new Simulator(20, 30);
+    	
+    	
+    }
+    
     /**
      * Create a simulation field with the given size.
      * @param depth Depth of the field. Must be greater than zero.
