@@ -1,3 +1,4 @@
+package foxesandrabbits;
 import java.util.List;
 
 /**

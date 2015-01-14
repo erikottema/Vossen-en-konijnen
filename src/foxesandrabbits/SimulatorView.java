@@ -1,5 +1,6 @@
+package foxesandrabbits;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.color.*;
 import javax.swing.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
