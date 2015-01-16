@@ -3,7 +3,9 @@ import java.util.Random;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.awt.Color;
+import java.awt.*;
+
+import javax.swing.*;
 
 /**
  * A simple predator-prey simulator, based on a rectangular field
@@ -12,7 +14,7 @@ import java.awt.Color;
  * @author David J. Barnes and Michael Kölling
  * @version 2011.07.31
  */
-public class Simulator
+public class Simulator extends JFrame
 {
     // Constants representing configuration information for the simulation.
     // The default width for the grid.
@@ -33,6 +35,9 @@ public class Simulator
     // A graphical view of the simulation.
     private SimulatorView view;
     
+    private JButton button1;
+    private JButton button2;
+    
     /**
      * Construct a simulation field with default size.
      */
@@ -42,7 +47,8 @@ public class Simulator
     }
     
     public static void main(String[] args) {
-    	new Simulator(20, 30);
+    	new Simulator();
+    	
     	
     	
     }
@@ -71,7 +77,34 @@ public class Simulator
         
         // Setup a valid starting point.
         reset();
-    }
+        
+        //button 1
+    	button1 = new JButton("Step 1");
+        view.add(button1, BorderLayout.WEST);
+        simulateOneStep();
+        
+        //button 2
+    	button2 = new JButton("Step 100");
+        view.add(button2, BorderLayout.EAST);
+        
+		button1.addActionListener(new ActionListener() 
+		{
+
+			public void actionPerformed(ActionEvent e) 
+			{
+				simulateOneStep();
+			}
+		}
+		button2.addActionListener(new ActionListener() 
+		{
+
+			public void actionPerformed(ActionEvent e) 
+			{
+				simulate(100);
+			}
+
+		}
+    
     
     /**
      * Run the simulation from its current state for a reasonably long period,
