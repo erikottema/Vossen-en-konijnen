@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.awt.*;
+import java.awt.event.*;
 
 import javax.swing.*;
 
@@ -14,7 +15,7 @@ import javax.swing.*;
  * @author David J. Barnes and Michael Kölling
  * @version 2011.07.31
  */
-public class Simulator extends JFrame
+public class Simulator extends JFrame implements ActionListener
 {
     // Constants representing configuration information for the simulation.
     // The default width for the grid.
@@ -58,7 +59,7 @@ public class Simulator extends JFrame
      * @param depth Depth of the field. Must be greater than zero.
      * @param width Width of the field. Must be greater than zero.
      */
-    public Simulator(int depth, int width)
+    public Simulator(int depth, int width) 
     {
         if(width <= 0 || depth <= 0) {
             System.out.println("The dimensions must be greater than zero.");
@@ -90,22 +91,20 @@ public class Simulator extends JFrame
 		button1.addActionListener(new ActionListener() 
 		{
 
-			public void actionPerformed(ActionEvent e) 
+			public void actionPerformed(ActionEvent evt) 
 			{
 				simulateOneStep();
 			}
-		}
-		button2.addActionListener(new ActionListener() 
-		{
+		});
+		button2.addActionListener(new ActionListener() {
+			  public void actionPerformed(ActionEvent evt) {
+			    simulate(100);
+			  }
+			});
 
-			public void actionPerformed(ActionEvent e) 
-			{
-				simulate(100);
-			}
-
-		}
+		
     
-    
+    }
     /**
      * Run the simulation from its current state for a reasonably long period,
      * (4000 steps).
