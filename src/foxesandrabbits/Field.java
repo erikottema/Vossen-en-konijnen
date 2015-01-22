@@ -4,6 +4,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import static org.junit.Assert.*;
+
+import org.junit.Test;
 
 /**
  * Represent a rectangular grid of field positions.
@@ -65,7 +68,9 @@ public class Field
      */
     public void place(Object animal, int row, int col)
     {
-        place(animal, new Location(row, col));
+    	Location test = new Location(row, col);
+        place(animal, test);
+        
     }
     
     /**
