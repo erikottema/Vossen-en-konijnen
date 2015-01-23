@@ -1,5 +1,4 @@
 package foxesandrabbits;
-import java.util.Random;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,15 +16,15 @@ import javax.swing.*;
  */
 public class Simulator extends JFrame implements ActionListener
 {
-    // Constants representing configuration information for the simulation.
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	// Constants representing configuration information for the simulation.
     // The default width for the grid.
     private static final int DEFAULT_WIDTH = 120;
     // The default depth of the grid.
-    private static final int DEFAULT_DEPTH = 80;
-    // The probability that a fox will be created in any given grid position.
-    private static final double FOX_CREATION_PROBABILITY = 0.02;
-    // The probability that a rabbit will be created in any given grid position.
-    private static final double RABBIT_CREATION_PROBABILITY = 0.08;    
+    private static final int DEFAULT_DEPTH = 80;  
 
     // List of animals in the field.
     private List<Animal> animals;
@@ -49,7 +48,6 @@ public class Simulator extends JFrame implements ActionListener
     
     public static void main(String[] args) {
     	new Simulator();
-    	new PopulationGenerator();
     	
     	
     }
@@ -75,10 +73,6 @@ public class Simulator extends JFrame implements ActionListener
 
         // Create a view of the state of each location in the field.
         view = new SimulatorView(depth, width);
-        
-        // Kan verplaatst worden.
-        view.setColor(Rabbit.class, Color.ORANGE);
-        view.setColor(Fox.class, Color.BLUE);
         
         // Setup a valid starting point.
         reset();
@@ -163,33 +157,15 @@ public class Simulator extends JFrame implements ActionListener
     {
         step = 0;
         animals.clear();
-        populate();
+    	new PopulationGenerator();
         
         // Show the starting state in the view.
         view.showStatus(step, field);
     }
-    
-    /**
-     * Randomly populate the field with foxes and rabbits.
-     */
-    private void populate()
-    {
-        Random rand = Randomizer.getRandom();
-        field.clear();
-        for(int row = 0; row < field.getDepth(); row++) {
-            for(int col = 0; col < field.getWidth(); col++) {
-                if(rand.nextDouble() <= FOX_CREATION_PROBABILITY) {
-                    Location location = new Location(row, col);
-                    Fox fox = new Fox(true, field, location);
-                    animals.add(fox);
-                }
-                else if(rand.nextDouble() <= RABBIT_CREATION_PROBABILITY) {
-                    Location location = new Location(row, col);
-                    Rabbit rabbit = new Rabbit(true, field, location);
-                    animals.add(rabbit);
-                }
-                // else leave the location empty.
-            }
-        }
-    }
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 }
