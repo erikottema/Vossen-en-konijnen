@@ -49,7 +49,7 @@ public class Simulator extends JFrame implements ActionListener
     
     public static void main(String[] args) {
     	new Simulator();
-    	
+    	new PopulationGenerator();
     	
     	
     }
@@ -68,11 +68,15 @@ public class Simulator extends JFrame implements ActionListener
             width = DEFAULT_WIDTH;
         }
         
+        // Kan verplaatst worden.
         animals = new ArrayList<Animal>();
+        
         field = new Field(depth, width);
 
         // Create a view of the state of each location in the field.
         view = new SimulatorView(depth, width);
+        
+        // Kan verplaatst worden.
         view.setColor(Rabbit.class, Color.ORANGE);
         view.setColor(Fox.class, Color.BLUE);
         
