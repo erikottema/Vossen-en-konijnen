@@ -80,7 +80,7 @@ public class Simulator extends JFrame implements ActionListener
         //button 1
     	button1 = new JButton("Step 1");
         view.add(button1, BorderLayout.WEST);
-        simulateOneStep();
+        
         
         //button 2
     	button2 = new JButton("Step 100");
