@@ -7,6 +7,8 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+
+
 /**
  * A simple predator-prey simulator, based on a rectangular field
  * containing rabbits and foxes.
@@ -34,9 +36,16 @@ public class Simulator extends JFrame implements ActionListener
     private int step;
     // A graphical view of the simulation.
     private SimulatorView view;
-    
+    //Button 1
     private JButton button1;
+    //Button 2
     private JButton button2;
+    
+    //Nodig voor pie
+    //private Model model;
+	//private Viewr piechart;
+	
+   
     
     /**
      * Construct a simulation field with default size.
@@ -93,13 +102,20 @@ public class Simulator extends JFrame implements ActionListener
 			{
 				simulateOneStep();
 			}
-		});
+		  });
+		
 		button2.addActionListener(new ActionListener() {
-			  public void actionPerformed(ActionEvent evt) {
+			  public void actionPerformed(ActionEvent evt) 
+			  {
 			    simulate(100);
 			  }
 			});
-
+		
+		// Piechart aanmaken en plaatsen
+			//model =new Model();
+		    //piechart =new PieChart(model);
+		    //view.add(piechart, BorderLayout.WEST);
+		
 		
     
     }
