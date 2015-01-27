@@ -16,8 +16,14 @@ public abstract class Animal
     // The animal's position in the field.
     private Location location;
 <<<<<<< HEAD
+<<<<<<< HEAD
     // The age.
     protected int age;
+=======
+    //M Age
+    protected int age;
+    
+>>>>>>> origin/master
 =======
     //M Age
     protected int age;
