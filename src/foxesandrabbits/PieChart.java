@@ -49,8 +49,4 @@ public class PieChart extends Viewr {
 		
 	}
 
-//public static void main(String[] args) {
-	//	paintComponent();
-	//}
-
 }

@@ -1,64 +1,57 @@
 package foxesandrabbits;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.awt.*;
-import java.awt.event.*;
+import java.util.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 
-
+import foxesandrabbits.Simulator;
 
 /**
  * A simple predator-prey simulator, based on a rectangular field
  * containing rabbits and foxes.
  * 
- * @author David J. Barnes and Michael KÃ¶lling
+ * @author David J. Barnes and Michael Kölling
  * @version 2011.07.31
  */
-public class Simulator extends JFrame implements ActionListener
+public class Simulator extends JFrame implements ActionListener, Runnable
 {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	// Constants representing configuration information for the simulation.
+    // Constants representing configuration information for the simulation.
+   
+    
+    //M Verplaatst naar PopulationGenerator
+    // The probability that a fox will be created in any given grid position.
+    //private static final double FOX_CREATION_PROBABILITY = 0.02;
+    // The probability that a rabbit will be created in any given grid position.
+    //private static final double RABBIT_CREATION_PROBABILITY = 0.08;   
+	
     // The default width for the grid.
     private static final int DEFAULT_WIDTH = 120;
     // The default depth of the grid.
-    private static final int DEFAULT_DEPTH = 80;  
+    private static final int DEFAULT_DEPTH = 80;
 
     // List of animals in the field.
     private List<Animal> animals;
     // The current state of the field.
-    private Field field;
+    public Field field;
     // The current step of the simulation.
     private int step;
     // A graphical view of the simulation.
     private SimulatorView view;
-    //Button 1
+    //buttons
     private JButton button1;
-    //Button 2
     private JButton button2;
-    
-    //Nodig voor pie
-    //private Model model;
-	//private Viewr piechart;
-	
-   
-    
-    /**
-     * Construct a simulation field with default size.
-     */
-    public Simulator()
-    {
-        this(DEFAULT_DEPTH, DEFAULT_WIDTH);
-    }
+    private JButton button3;
+    private JButton button4;
+
+    //M Runner
+    private boolean run;
     
     public static void main(String[] args) {
     	new Simulator();
-    	
-    	
     }
     
     /**
@@ -66,59 +59,101 @@ public class Simulator extends JFrame implements ActionListener
      * @param depth Depth of the field. Must be greater than zero.
      * @param width Width of the field. Must be greater than zero.
      */
-    public Simulator(int depth, int width) 
+    public Simulator()
     {
-        if(width <= 0 || depth <= 0) {
-            System.out.println("The dimensions must be greater than zero.");
-            System.out.println("Using default values.");
-            depth = DEFAULT_DEPTH;
-            width = DEFAULT_WIDTH;
-        }
-        
-        // Kan verplaatst worden.
         animals = new ArrayList<Animal>();
         
-        field = new Field(depth, width);
 
         // Create a view of the state of each location in the field.
-        view = new SimulatorView(depth, width);
+        view = new SimulatorView(DEFAULT_DEPTH, DEFAULT_WIDTH);
+        field = new Field(DEFAULT_DEPTH, DEFAULT_WIDTH);
+        //PopulationGenerator pop = new PopulationGenerator();
         
-        // Setup a valid starting point.
-        reset();
+        //view.setColor(Rabbit.class, Color.orange);
+        //view.setColor(Fox.class, Color.blue);
         
-        //button 1
-    	button1 = new JButton("Step 1");
-        view.add(button1, BorderLayout.WEST);
+        PopulationGenerator pop = new PopulationGenerator(view);
         
+        step = 0;
+        animals.clear();
         
-        //button 2
-    	button2 = new JButton("Step 100");
-        view.add(button2, BorderLayout.EAST);
+        pop.populate(field, animals);
+        //this.field = pop.populate();
+        //pop.populate(new SimulatorView(depth, width));
+        //this.field = pop.populate(field);
         
-		button1.addActionListener(new ActionListener() 
-		{
+       
+        // Show the starting state in the view.
+        //view.showStatus(step, pop.populate());
+        //M Moved to PopGen
+        //view.setColor(Rabbit.class, Color.orange);
+        //view.setColor(Fox.class, Color.blue);
 
-			public void actionPerformed(ActionEvent evt) 
-			{
-				simulateOneStep();
-			}
-		  });
-		
-		button2.addActionListener(new ActionListener() {
-			  public void actionPerformed(ActionEvent evt) 
-			  {
-			    simulate(100);
-			  }
+        // Setup a valid starting point.
+        //reset();
+        
+        //M show view
+        //view.showStatus(step, field);
+        
+        //button1
+        button1 = new JButton("Step 1");
+        view.add(button1, BorderLayout.WEST);
+        button1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent evt) 
+				{
+					simulateOneStep();
+				}
 			});
-		
-		// Piechart aanmaken en plaatsen
-			//model =new Model();
-		    //piechart =new PieChart(model);
-		    //view.add(piechart, BorderLayout.WEST);
-		
+	       
+
+        button2 = new JButton("Step 100");
+        view.add(button2, BorderLayout.EAST);
+        button2.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent evt) 
+				{
+					simulate(100);
+				}
+        	});
 		
     
+    	//button 3
+  		button3 = new JButton("Start");
+        view.add(button3, BorderLayout.NORTH);
+  		button3.addActionListener(new ActionListener() {
+  				public void actionPerformed(ActionEvent evt) {
+  					Simulator.this.start();
+  				}
+  			});
+  		
+  		//button 4
+  		button4 = new JButton("Start");
+        view.add(button4, BorderLayout.SOUTH);
+  		button4.addActionListener(new ActionListener() {
+  				public void actionPerformed(ActionEvent evt) {;
+  					Simulator.this.stop();
+  				}
+  			});
     }
+	
+    //M Runner methods
+    public void start() {
+		new Thread(this).start();
+	}
+    
+	public void stop() {
+		run=false;
+	}
+	
+	public void run() {
+		run=true;
+		while(run) {
+			simulateOneStep();
+			try {
+				Thread.sleep(100);
+			} catch (Exception e) {} 
+		}
+	}
+    
     /**
      * Run the simulation from its current state for a reasonably long period,
      * (4000 steps).
@@ -169,19 +204,47 @@ public class Simulator extends JFrame implements ActionListener
     /**
      * Reset the simulation to a starting position.
      */
+    
+    /*
     public void reset()
     {
         step = 0;
         animals.clear();
-    	new PopulationGenerator();
-        
+        //this.field = pop.populate();
+        //pop.populate(new SimulatorView(depth, width));
+        pop.populate(field);
         // Show the starting state in the view.
-        view.showStatus(step, field);
+        //view.showStatus(step, pop.populate());
+    }*/
+    
+    //M Methode om een dier in de arraylist toe te voegen vanuit PopulationGenerator
+    public void addAnimal(Animal a) {
+    	animals.add(a);
     }
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+   
+    
+    
+    /*
+     * Randomly populate the field with foxes and rabbits.
+     
+    private void populate()
+    {
+        Random rand = Randomizer.getRandom();
+        field.clear();
+        for(int row = 0; row < field.getDepth(); row++) {
+            for(int col = 0; col < field.getWidth(); col++) {
+                if(rand.nextDouble() <= FOX_CREATION_PROBABILITY) {
+                    Location location = new Location(row, col);
+                    Fox fox = new Fox(true, field, location);
+                    animals.add(fox);
+                }
+                else if(rand.nextDouble() <= RABBIT_CREATION_PROBABILITY) {
+                    Location location = new Location(row, col);
+                    Rabbit rabbit = new Rabbit(true, field, location);
+                    animals.add(rabbit);
+                }
+                // else leave the location empty.
+            }
+        }
+    }*/
 }
