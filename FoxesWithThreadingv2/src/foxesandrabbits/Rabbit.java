@@ -26,8 +26,8 @@ public class Rabbit extends Animal
     
     // Individual characteristics (instance fields).
     
-    // The rabbit's age.
-    private int age;
+    // The rabbit's age. M moved to animal
+    //private int age;
 
     /**
      * Create a new rabbit. A rabbit may be created with age
@@ -40,9 +40,9 @@ public class Rabbit extends Animal
     public Rabbit(boolean randomAge, Field field, Location location)
     {
         super(field, location);
-        age = 0;
+        super.age = 0;
         if(randomAge) {
-            age = rand.nextInt(MAX_AGE);
+        	super.age = rand.nextInt(MAX_AGE);
         }
     }
     
@@ -53,7 +53,7 @@ public class Rabbit extends Animal
      */
     public void act(List<Animal> newRabbits)
     {
-        incrementAge();
+        super.incrementAge();
         if(isAlive()) {
             giveBirth(newRabbits);            
             // Try to move into a free location.
@@ -69,56 +69,49 @@ public class Rabbit extends Animal
     }
 
     /**
-     * Increase the age.
-     * This could result in the rabbit's death.
-     */
-    private void incrementAge()
-    {
-        age++;
-        if(age > MAX_AGE) {
-            setDead();
-        }
-    }
-    
-    /**
      * Check whether or not this rabbit is to give birth at this step.
      * New births will be made into free adjacent locations.
      * @param newRabbits A list to return newly born rabbits.
      */
+    
+    //M Veranderd met een nieuwe super.breed
     private void giveBirth(List<Animal> newRabbits)
     {
         // New rabbits are born into adjacent locations.
         // Get a list of adjacent free locations.
         Field field = getField();
         List<Location> free = field.getFreeAdjacentLocations(getLocation());
-        int births = breed();
+        int births = super.breed();
         for(int b = 0; b < births && free.size() > 0; b++) {
             Location loc = free.remove(0);
             Rabbit young = new Rabbit(false, field, loc);
             newRabbits.add(young);
         }
     }
-        
-    /**
-     * Generate a number representing the number of births,
-     * if it can breed.
-     * @return The number of births (may be zero).
-     */
-    private int breed()
-    {
-        int births = 0;
-        if(canBreed() && rand.nextDouble() <= BREEDING_PROBABILITY) {
-            births = rand.nextInt(MAX_LITTER_SIZE) + 1;
-        }
-        return births;
-    }
 
-    /**
-     * A rabbit can breed if it has reached the breeding age.
-     * @return true if the rabbit can breed, false otherwise.
-     */
-    private boolean canBreed()
+    //M Kan dit konijn breeden?
+    protected boolean canBreed()   
     {
-        return age >= BREEDING_AGE;
+        return super.age >= BREEDING_AGE;
+    }
+    
+    //M Get breeding age
+    public int getBreedingAge() {
+    	return BREEDING_AGE;
+    }
+    
+    //M Get Max age
+    public int getMaxAge() {
+    	return MAX_AGE;
+    }
+    
+    //M Get breeding propability
+    public double getBreedingPropability() {
+    	return BREEDING_PROBABILITY;
+    }
+    
+    //M Get maximum litter size
+    public int getMaxLitterSize() {
+    	return MAX_LITTER_SIZE;
     }
 }

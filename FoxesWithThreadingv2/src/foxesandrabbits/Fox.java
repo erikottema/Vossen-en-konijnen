@@ -29,8 +29,8 @@ public class Fox extends Animal
     private static final Random rand = Randomizer.getRandom();
     
     // Individual characteristics (instance fields).
-    // The fox's age.
-    private int age;
+    // The fox's age. M Moved to animal
+    //private int age;
     // The fox's food level, which is increased by eating rabbits.
     private int foodLevel;
 
@@ -84,17 +84,6 @@ public class Fox extends Animal
             }
         }
     }
-
-    /**
-     * Increase the age. This could result in the fox's death.
-     */
-    private void incrementAge()
-    {
-    	super.age++;
-        if(age > MAX_AGE) {
-            setDead();
-        }
-    }
     
     /**
      * Make this fox more hungry. This could result in the fox's death.
@@ -138,13 +127,15 @@ public class Fox extends Animal
      * New births will be made into free adjacent locations.
      * @param newFoxes A list to return newly born foxes.
      */
+    
+    //M Veranderd met een nieuwe super.breed
     private void giveBirth(List<Animal> newFoxes)
     {
         // New foxes are born into adjacent locations.
         // Get a list of adjacent free locations.
         Field field = getField();
         List<Location> free = field.getFreeAdjacentLocations(getLocation());
-        int births = breed();
+        int births = super.breed();
         for(int b = 0; b < births && free.size() > 0; b++) {
             Location loc = free.remove(0);
             Fox young = new Fox(false, field, loc);
@@ -152,25 +143,28 @@ public class Fox extends Animal
         }
     }
         
-    /**
-     * Generate a number representing the number of births,
-     * if it can breed.
-     * @return The number of births (may be zero).
-     */
-    private int breed()
-    {
-        int births = 0;
-        if(canBreed() && rand.nextDouble() <= BREEDING_PROBABILITY) {
-            births = rand.nextInt(MAX_LITTER_SIZE) + 1;
-        }
-        return births;
-    }
-
-    /**
-     * A fox can breed if it has reached the breeding age.
-     */
-    private boolean canBreed()
-    {
+    //M Kan deze vos breeden?
+    protected boolean canBreed() {
         return super.age >= BREEDING_AGE;
+    }
+    
+    //M Get breeding age
+    public int getBreedingAge() {
+    	return BREEDING_AGE;
+    }
+    
+    //M Get Max age
+    public int getMaxAge() {
+    	return MAX_AGE;
+    }
+    
+    //M Get breeding propability
+    public double getBreedingPropability() {
+    	return BREEDING_PROBABILITY;
+    }
+    
+    //M Get maximum litter size
+    public int getMaxLitterSize() {
+    	return MAX_LITTER_SIZE;
     }
 }

@@ -1,5 +1,6 @@
 package foxesandrabbits;
 import java.util.List;
+import java.util.Random;
 
 /**
  * A class representing shared characteristics of animals.
@@ -17,6 +18,8 @@ public abstract class Animal
     private Location location;
     //M Age
     protected int age;
+    // A shared random number generator to control breeding.
+    private static final Random rand = Randomizer.getRandom();
     
     /**
      * Create a new animal at location in field.
@@ -37,6 +40,16 @@ public abstract class Animal
      * @param newAnimals A list to receive newly born animals.
      */
     abstract public void act(List<Animal> newAnimals);
+    //M Abstract voor breeding age, wordt ook gebruikt in Fox en Rabbit die de respectievelijke breeding ages returnt.
+    abstract protected int getBreedingAge();
+    //M Abstract voor Max age, zelfde principe als hierboven.
+    abstract protected int getMaxAge();
+    //M Abstract voor canbreed
+    abstract protected boolean canBreed();
+    //M Abstract getter breeding propability
+    abstract protected double getBreedingPropability();
+    //M Abstract voor litter size
+    abstract protected int getMaxLitterSize();
 
     /**
      * Check whether the animal is alive or not.
@@ -91,4 +104,23 @@ public abstract class Animal
     {
         return field;
     }
+    
+    //M Increment age, uit fox en rabbit gehaald en hier gezet
+    protected void incrementAge() {
+    	age++;
+        if(age > getMaxAge()) {
+            setDead();
+        }
+    }
+    
+    //M Breed, vanuit fox en rabbit
+    protected int breed()
+    {
+        int births = 0;
+        if(canBreed() && rand.nextDouble() <= getBreedingPropability()) {
+            births = rand.nextInt(getMaxLitterSize()) + 1;
+        }
+        return births;
+    }
+    
 }
