@@ -1,4 +1,5 @@
 package foxesandrabbits;
+import java.util.Random;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,29 +12,34 @@ import javax.swing.*;
  * A simple predator-prey simulator, based on a rectangular field
  * containing rabbits and foxes.
  * 
- * @author David J. Barnes and Michael KÃ¶lling
+ * @author David J. Barnes and Michael Kölling
  * @version 2011.07.31
  */
 public class Simulator extends JFrame implements ActionListener
 {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	// Constants representing configuration information for the simulation.
+    // Constants representing configuration information for the simulation.
     // The default width for the grid.
     private static final int DEFAULT_WIDTH = 120;
     // The default depth of the grid.
-    private static final int DEFAULT_DEPTH = 80;  
+    private static final int DEFAULT_DEPTH = 80;
+    // The probability that a fox will be created in any given grid position.
+    //----------@Sara, deze heb ik verplaatst naar PopulationGenerator en hier uitgezet
+    //private static final double FOX_CREATION_PROBABILITY = 0.02;
+    // The probability that a rabbit will be created in any given grid position.
+    //----------@Sara, deze heb ik verplaatst naar PopulationGenerator en hier uitgezet
+    //private static final double RABBIT_CREATION_PROBABILITY = 0.08;    
 
     // List of animals in the field.
-    private List<Animal> animals;
+    //----------@Sara, deze heb ik verplaatst naar PopulationGenerator en hier uitgezet
+    //private List<Animal> animals;
     // The current state of the field.
     private Field field;
     // The current step of the simulation.
     private int step;
     // A graphical view of the simulation.
     private SimulatorView view;
+    //------------@SARA hier wordt PopulationGenerator aangeroepen.
+    
     
     private JButton button1;
     private JButton button2;
@@ -48,6 +54,9 @@ public class Simulator extends JFrame implements ActionListener
     
     public static void main(String[] args) {
     	new Simulator();
+    	//--------@Sara, hieronder roep ik PopulationGenerator aan, bij het aanroepen vd Simulator
+    	
+    	
     	
     	
     }
@@ -66,14 +75,18 @@ public class Simulator extends JFrame implements ActionListener
             width = DEFAULT_WIDTH;
         }
         
-        // Kan verplaatst worden.
-        animals = new ArrayList<Animal>();
+       // ----------@Sara, deze heb ik verplaatst naar PopulationGenerator en hier uitgezet
+       // animals = new ArrayList<Animal>();
         
         field = new Field(depth, width);
 
         // Create a view of the state of each location in the field.
         view = new SimulatorView(depth, width);
         
+        
+        view.setColor(Rabbit.class, Color.ORANGE);
+        view.setColor(Fox.class, Color.BLUE);
+        PopulationGenerator populationgenerator = new PopulationGenerator(view);
         // Setup a valid starting point.
         reset();
         
@@ -111,6 +124,8 @@ public class Simulator extends JFrame implements ActionListener
     {
         simulate(4000);
     }
+    
+    public 
     
     /**
      * Run the simulation from its current state for the given number of steps.
@@ -157,15 +172,34 @@ public class Simulator extends JFrame implements ActionListener
     {
         step = 0;
         animals.clear();
-    	new PopulationGenerator();
+        populationgenerator.populate();
         
         // Show the starting state in the view.
-        view.showStatus(step, field);
+        //view.showStatus(step, field);
     }
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+    
+    /**
+     * Randomly populate the field with foxes and rabbits.
+     */
+    // ----------@Sara, deze heb ik verplaatst naar PopulationGenerator en hier uitgezet
+    /*private void populate()
+    {
+        Random rand = Randomizer.getRandom();
+        field.clear();
+        for(int row = 0; row < field.getDepth(); row++) {
+            for(int col = 0; col < field.getWidth(); col++) {
+                if(rand.nextDouble() <= FOX_CREATION_PROBABILITY) {
+                    Location location = new Location(row, col);
+                    Fox fox = new Fox(true, field, location);
+                    animals.add(fox);
+                }
+                else if(rand.nextDouble() <= RABBIT_CREATION_PROBABILITY) {
+                    Location location = new Location(row, col);
+                    Rabbit rabbit = new Rabbit(true, field, location);
+                    animals.add(rabbit);
+                }
+                // else leave the location empty.
+            }
+        }
+    }*/
 }
