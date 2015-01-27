@@ -1,4 +1,4 @@
-package foxesandrabbits;
+/*package foxesandrabbits;
 import java.util.*;
 
 public abstract class Actor {
@@ -6,3 +6,4 @@ public abstract class Actor {
 	abstract public boolean isActive();
 }
 
+*/

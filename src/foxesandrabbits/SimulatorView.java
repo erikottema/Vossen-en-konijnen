@@ -150,8 +150,8 @@ public class SimulatorView extends JFrame
          */
         public FieldView(int height, int width)
         {
-            gridHeight = height;
-            gridWidth = width;
+            gridHeight = height - GRID_VIEW_SCALING_FACTOR*2;
+            gridWidth = width - GRID_VIEW_SCALING_FACTOR*2;
             size = new Dimension(0, 0);
         }
 
